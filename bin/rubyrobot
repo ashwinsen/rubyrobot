@@ -1,0 +1,22 @@
+$:.unshift(File.dirname(__FILE__) + '/../lib') unless $:.include?(File.dirname(__FILE__) + '/../lib')
+
+require_relative '../lib/model/robot_simulator'
+require_relative '../lib/robot_cli'
+require_relative '../lib/command_dispatcher'
+
+def main
+  #keeping the code that builds the object graph separate from the game code
+  #Currently the object graph code is pretty basic but if the object graph were to grow it would be time to use a creational pattern
+  table_new = Table.new(4, 4)
+  game = RobotCli.new RobotSimulator.new(table_new), INPUT_TO_ACTION_COMMAND_CHAIN
+  $stdout.puts 'Type HELP for how to play'
+  while true
+    cmd    = gets.chomp
+    result = game.cmd(cmd)
+    $stdout.puts result if result.class == String
+  end
+end
+
+if __FILE__ == $0
+  main()
+end
